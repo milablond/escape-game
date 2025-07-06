@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+    <title>The Mind Trap</title>
+  </head>
+  <body>
+    <div class="game-container">
+      <!-- Timer et progression -->
+      <div class="timer" id="timer">5:00</div>
+      <div class="progress" id="progress">Énigme 1/7</div>
+      <div class="shadow-container">
+        <!-- Ombres mouvantes -->
+        <div class="moving-shadow" style="top: 10%; left: 10%"></div>
+        <div
+          class="moving-shadow"
+          style="top: 60%; left: 80%; animation-delay: -4s"
+        ></div>
+      </div>
+      <!-- Écran de démarrage -->
+      <div class="screen active" id="start-screen">
+        <div class="start-screen">
+          <h1>THE MIND TRAP</h1>
+          <p>
+            Vous êtes piégé dans un système. Vous avez 5 minutes pour résoudre 7
+            énigmes et vous échapper. Méfiez-vous... tout n'est pas ce qu'il
+            semble être. Chaque erreur vous coûtera du temps précieux.
+          </p>
+          <button class="start-btn" onclick="startGame()">COMMENCER</button>
+        </div>
+      </div>
+
+      <!-- Énigme 1: Bouton piégé -->
+      <div class="screen" id="enigma1">
+        <div class="enigma">
+          <h2>Énigme 1: Premier Contact</h2>
+          <div class="enigma-content">
+            <p>Cliquez sur le bouton pour continuer</p>
+            <button class="btn" onclick="penaltyTime(); showHint1()">
+              Continuer
+            </button>
+            <button
+              class="btn"
+              onclick="nextEnigma()"
+              style="opacity: 0; margin-left: 200px"
+            >
+              Vraiment continuer
+            </button>
+            <div class="fake-help" onclick="showFakeHelp1()">Aide</div>
+            <div
+              id="hint1"
+              style="display: none; margin-top: 20px; color: #888"
+            >
+              <p>Cherchez le vrai bouton...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Énigme 2: Code caché -->
+      <div class="screen" id="enigma2">
+        <div class="enigma">
+          <h2>Énigme 2: Le Code Secret</h2>
+          <div class="enigma-content">
+            <p>Entrez le code à 4 chiffres:</p>
+            <input
+              type="text"
+              class="input-field"
+              id="code-input"
+              placeholder="****"
+              maxlength="4"
+            />
+            <button class="btn" onclick="checkCode()">Valider</button>
+            <div
+              class="scroll-container"
+              style="margin-top: 20px"
+              id="scroll-zone"
+            >
+              <div class="scroll-content">
+                <div class="hidden-code">7394</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Énigme 3: Grille piégée -->
+      <div class="screen" id="enigma3">
+        <div class="enigma">
+          <h2>Énigme 3: Motif Caché</h2>
+          <div class="enigma-content">
+            <p>Cliquez sur les cases pour former le motif "L":</p>
+            <div class="puzzle-grid" id="grid">
+              <!-- en js -->
+            </div>
+            <button class="btn" onclick="checkPattern()">Vérifier</button>
+            <div style="margin-top: 20px; color: #666; font-size: 14px">
+              Formez un "L" avec les cases sélectionnées (5 cases au total)
+            </div>
+            <div
+              class="trap-text"
+              style="bottom: 20px; right: 20px; color: #444444"
+              onclick="revealTrick3()"
+            >
+              Activation requise
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Énigme 4: Texte changeant -->
+      <div class="screen" id="enigma4">
+        <div class="enigma">
+          <h2>Énigme 4: <span id="changing-title">Mot Mystère</span></h2>
+          <div class="enigma-content">
+            <p id="changing-text">
+              Quel est le mot qui change dans ce texte ? Tapez-le exactement
+              comme il apparaît.
+            </p>
+            <input
+              type="text"
+              class="input-field"
+              id="word-input"
+              placeholder="Mot mystère"
+            />
+            <button class="btn" onclick="checkWord()">Valider</button>
+            <div style="margin-top: 20px; color: #666; font-size: 12px">
+              Observez attentivement... quelque chose change.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Énigme 5: Calcul piégé -->
+      <div class="screen" id="enigma5">
+        <div class="enigma">
+          <h2>Énigme 5: Mathématiques</h2>
+          <div class="enigma-content">
+            <p>Résolvez: <span id="math-problem">2 + 2 = ?</span></p>
+            <input
+              type="number"
+              class="input-field"
+              id="math-input"
+              placeholder="Réponse"
+            />
+            <button class="btn" onclick="checkMath()">Valider</button>
+            <div style="margin-top: 20px; color: #888; font-size: 14px">
+              Attention aux pièges... lisez bien la question.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Énigme 6: Séquence mémoire -->
+      <div class="screen" id="enigma6">
+        <div class="enigma">
+          <h2>Énigme 6: Mémoire</h2>
+          <div class="enigma-content">
+            <p>Mémorisez la séquence qui va s'afficher:</p>
+            <div
+              id="sequence-display"
+              style="
+                font-size: 24px;
+                margin: 20px 0;
+                height: 60px;
+                line-height: 60px;
+              "
+            >
+              Prêt ?
+            </div>
+            <button class="btn" id="start-sequence" onclick="startSequence()">
+              Commencer
+            </button>
+            <div id="sequence-input" style="display: none">
+              <input
+                type="text"
+                class="input-field"
+                placeholder="Répétez la séquence"
+                id="sequence-field"
+              />
+              <button class="btn" onclick="checkSequence()">Valider</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Énigme 7: Finale piégée -->
+      <div class="screen" id="enigma7">
+        <div class="enigma">
+          <h2>Énigme 7: Sortie</h2>
+          <div class="enigma-content">
+            <p>Choisissez votre sortie:</p>
+            <div style="margin: 30px 0">
+              <button
+                class="btn"
+                onclick="penaltyTime(); showWrongChoice()"
+                style="background: #00aa00"
+              >
+                Porte Verte (Sûre)
+              </button>
+              <button
+                class="btn"
+                onclick="penaltyTime(); showWrongChoice()"
+                style="background: #0066cc"
+              >
+                Porte Bleue (Risquée)
+              </button>
+              <button
+                class="btn"
+                onclick="penaltyTime(); showWrongChoice()"
+                style="background: #ffaa00"
+              >
+                Porte Orange (Inconnue)
+              </button>
+            </div>
+            <div class="hidden-element" id="real-exit">
+              <p style="color: #666; font-size: 14px">
+                Toutes les portes mènent au même endroit. La vraie sortie est...
+              </p>
+              <button
+                class="btn"
+                onclick="endGame(true)"
+                style="background: #ff3333"
+              >
+                Ici
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Écran de fin -->
+      <div class="screen" id="end-screen">
+        <div class="end-screen">
+          <div id="end-content">
+            <!-- Contenu js -->
+          </div>
+          <button class="btn" onclick="restartGame()" style="margin-top: 30px">
+            Recommencer
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

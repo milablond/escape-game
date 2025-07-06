@@ -1,0 +1,389 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Courier New', monospace;
+  background: #0a0a0a;
+  color: #fff;
+  position: relative;
+}
+
+/* Animations et effets globaux */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes shadow-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+  }
+}
+
+/* Interface principale */
+.game-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+}
+
+.timer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  color: #ff3333;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(255, 51, 51, 0.5);
+  z-index: 1000;
+  animation: shadow-pulse 2s infinite;
+}
+
+.progress {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 14px;
+  color: #888;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px 15px;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+/* Écrans du jeu */
+.screen {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 50px;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Écran de démarrage */
+
+.start-screen h1 {
+  font-size: 48px;
+  color: #ff3333;
+  text-shadow: 0 0 20px rgba(255, 51, 51, 0.8);
+  margin-bottom: 30px;
+  animation: flicker 3s infinite;
+}
+
+.start-screen p {
+  font-size: 18px;
+  color: #ccc;
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.start-btn {
+  background: linear-gradient(45deg, #ff3333, #cc0000);
+  color: white;
+  font-size: 20px;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.start-btn:hover {
+  background: linear-gradient(45deg, #cc0000, #ff3333);
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 51, 51, 0.6);
+}
+
+/* Énigmes */
+.enigma {
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+}
+
+.enigma h2 {
+  font-size: 32px;
+  color: #ff6666;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px rgba(255, 102, 102, 0.5);
+}
+
+.enigma-content {
+  background: rgba(20, 20, 20, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+  border: 2px solid #333;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+/* Éléments interactifs */
+.input-field {
+  background: #1a1a1a;
+  border: 2px solid #444;
+  color: #fff;
+  padding: 15px;
+  font-size: 18px;
+  border-radius: 5px;
+  margin: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #ff3333;
+  box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+}
+
+.btn {
+  background: #333;
+  color: #fff;
+  border: 2px solid #666;
+  padding: 12px 25px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background: #444;
+  border-color: #888;
+}
+
+/* Éléments cachés et piégés */
+.hidden-element {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.hidden-element.revealed {
+  opacity: 1;
+}
+
+.trap-text {
+  color: #666;
+  font-size: 12px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.fake-help {
+  position: absolute;
+  top: 100px;
+  right: 50px;
+  background: #ff9900;
+  color: black;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Effets spéciaux */
+.glitch-text {
+  animation: glitch 0.3s infinite;
+}
+
+.moving-shadow {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255, 0, 0, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: move-shadow 8s infinite linear;
+  pointer-events: none;
+}
+
+.shadow-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+@keyframes move-shadow {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(100px, 100px);
+  }
+  50% {
+    transform: translate(-100px, 100px);
+  }
+  75% {
+    transform: translate(-100px, -100px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Écran de fin */
+.end-screen {
+  text-align: center;
+}
+
+.success {
+  color: #00ff00;
+  font-size: 30px;
+  text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+}
+
+.failure {
+  color: #ff0000;
+  font-size: 30px;
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+}
+
+/* Énigmes spécifiques */
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.puzzle-cell {
+  width: 80px;
+  height: 80px;
+  background: #2a2a2a;
+  border: 2px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 24px;
+  transition: all 0.3s;
+}
+
+.puzzle-cell:hover {
+  background: #3a3a3a;
+  border-color: #777;
+}
+
+.puzzle-cell.selected {
+  background: #ff3333;
+  border-color: #ff6666;
+}
+
+/* Scrolling horizontal caché */
+.scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  height: 200px;
+  border: 2px solid #444;
+  background: #1a1a1a;
+  position: relative;
+  cursor: grab;
+}
+
+.scroll-container:active {
+  cursor: default;
+}
+
+.scroll-container:hover {
+  cursor: default;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scroll-content {
+  width: 200%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" fill="%23222"/></svg>');
+  position: relative;
+  user-select: none;
+}
+
+.hidden-code {
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ff3333;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .screen {
+    padding: 20px;
+  }
+
+  .start-screen h1 {
+    font-size: 32px;
+  }
+
+  .enigma h2 {
+    font-size: 24px;
+  }
+
+  .timer {
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+  }
+}
