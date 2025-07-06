@@ -399,7 +399,6 @@ window.addEventListener('load', () => {
   }, 5000);
 });
 
-// Dans ton main.js ou dans un <script> en bas de body
 function setVh() {
   let vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh}px`);
